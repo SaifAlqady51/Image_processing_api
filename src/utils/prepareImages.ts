@@ -3,11 +3,15 @@ import { promises as fsPromises } from 'fs';
 import path from 'path';
 
 // makeImageArray is a function making array of images names the api have
-async function makeImagesArray(): Promise<string[]> {
-  const imageFolderPath = path.resolve(__dirname, '../../images/full');
-  const images: string[] = await fsPromises.readdir(imageFolderPath);
+async function makeImagesArray(): Promise<string[] | void> {
+  try{
+    const imageFolderPath = path.resolve(__dirname, '../../images/full');
+    const images: string[] = await fsPromises.readdir(imageFolderPath);
+    return images;
 
-  return images;
+  }catch(error){
+    console.log(`Error : ${error}`) 
+  }
 }
 
 // searchForArray is a function searching for the image name in the image array
