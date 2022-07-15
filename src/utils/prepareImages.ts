@@ -4,13 +4,12 @@ import path from 'path';
 
 // makeImageArray is a function making array of images names the api have
 async function makeImagesArray(): Promise<string[] | void> {
-  try{
+  try {
     const imageFolderPath = path.resolve(__dirname, '../../images/full');
     const images: string[] = await fsPromises.readdir(imageFolderPath);
     return images;
-
-  }catch(error){
-    console.log(`Error : ${error}`) 
+  } catch (error) {
+    console.log(error);
   }
 }
 

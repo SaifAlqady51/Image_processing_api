@@ -12,30 +12,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.searchForImage = exports.makeImagesArray = void 0;
-const fs_1 = require("fs");
+const sharp_1 = __importDefault(require("sharp"));
 const path_1 = __importDefault(require("path"));
-// makeImageArray is a function making array of images names the api have
-function makeImagesArray() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const imageFolderPath = path_1.default.resolve(__dirname, '../../images/full');
-            const images = yield fs_1.promises.readdir(imageFolderPath);
-            return images;
-        }
-        catch (error) {
-            console.log(error);
-        }
-    });
-}
-exports.makeImagesArray = makeImagesArray;
-// searchForArray is a function searching for the image name in the image array
-function searchForImage(imageArray, imageName) {
-    for (let i = 0; i < imageArray.length; i++) {
-        if (imageArray[i].replace('.jpg', '') === imageName) {
-            return imageName;
-        }
+//creating the path to the full folder
+const imageFullPath = path_1.default.resolve(__dirname, '../../images/full');
+//making middleware to store data in thumb folder
+const resizeImage = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const filename = req.query.filename;
+    const width = req.query.width;
+    const height = req.query.height;
+    try {
+        yield (0, sharp_1.default)(`${imageFullPath}/${filename}.jpg`)
+            .resize(parseInt(width, 10), parseInt(height, 10))
+            .toFile(`./images/thumb/resized-${width}-${height}-${filename}.jpg`);
     }
-    return '';
-}
-exports.searchForImage = searchForImage;
+    catch (error) {
+        console.log(error);
+    }
+    next();
+});
+exports.default = resizeImage;

@@ -14,29 +14,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const path_1 = __importDefault(require("path"));
-const sharp_1 = __importDefault(require("sharp"));
+const middleware_1 = __importDefault(require("../../utils/middleware"));
 const prepareImages_1 = require("../../utils/prepareImages");
 const api = express_1.default.Router();
-const imageFullPath = path_1.default.resolve(__dirname, '../../../images/full');
 const imageThumbPath = path_1.default.resolve(__dirname, '../../../images/thumb');
-api.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+api.get('/', middleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const images = yield (0, prepareImages_1.makeImagesArray)();
     // check if the user enter filename, width and height
-    if (req.query.filename && req.query.width && req.query.height) {
+    if (images && req.query.filename && req.query.width && req.query.height) {
         const { filename, width, height } = req.query;
         //check the filename is in the full folder
         if (!images.includes(`${filename}.jpg`)) {
             res.send('<h1>filename does not exist</h1> <h2>filname example : fjord</h2>');
         }
-        // make an image with the entered inputes (width,height)
-        yield (0, sharp_1.default)(`${imageFullPath}/${filename}.jpg`)
-            .resize(parseInt(width, 10), parseInt(height, 10))
-            .toFile(`./images/thumb/resized-${width}-${height}-${filename}.jpg`);
         // display the resized image on the screen
         res.sendFile(`${imageThumbPath}/resized-${width}-${height}-${(0, prepareImages_1.searchForImage)(images, filename.toString())}.jpg`);
     }
     else {
-        res.send('<h1>Please make sure to type filename, width and height of the image</h1> <h2>filname example : fjord</h2> ');
+        res.send('<h1>Please make sure to type filename, width and height of the image => localhost:3000/api/image?filname={}&width={}&height={}</h1><h2>filname example : fjord</h2> ');
     }
 }));
 exports.default = api;
