@@ -14,21 +14,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sharp_1 = __importDefault(require("sharp"));
 const path_1 = __importDefault(require("path"));
-//creating the path to the full folder
 const imageFullPath = path_1.default.resolve(__dirname, '../../images/full');
-//making middleware to store data in thumb folder
-const resizeImage = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const filename = req.query.filename;
-    const width = req.query.width;
-    const height = req.query.height;
-    try {
-        yield (0, sharp_1.default)(`${imageFullPath}/${filename}.jpg`)
-            .resize(parseInt(width, 10), parseInt(height, 10))
-            .toFile(`./images/thumb/resized-${width}-${height}-${filename}.jpg`);
-    }
-    catch (error) {
-        console.log(error);
-    }
-    next();
-});
-exports.default = resizeImage;
+// sharpFun is a function to create image with specific width and height values
+function sharpFun(filename, width, height) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield (0, sharp_1.default)(`${imageFullPath}/${filename}.jpg`)
+                .resize(parseInt(width, 10), parseInt(height, 10))
+                .toFile(`./images/thumb/resized-${width}-${height}-${filename}.jpg`);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    });
+}
+exports.default = sharpFun;
