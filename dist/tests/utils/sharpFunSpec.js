@@ -18,6 +18,7 @@ const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const imageThumbPath = path_1.default.resolve(__dirname, '../../../images/thumb');
 describe('Test sharpFun ', () => {
+    // test that sharpFun create image if it's not exists
     it('check creating image ', () => __awaiter(void 0, void 0, void 0, function* () {
         if ((0, checkImageExistence_1.default)(`${imageThumbPath}/resized-600-300-fjord.jpg`)) {
             fs_1.default.unlinkSync(`${imageThumbPath}/resized-600-300-fjord.jpg`);
@@ -26,10 +27,12 @@ describe('Test sharpFun ', () => {
         expect((0, checkImageExistence_1.default)(`${imageThumbPath}/resized-600-300-fjord.jpg`)).toBeTruthy();
         fs_1.default.unlinkSync(`${imageThumbPath}/resized-600-300-fjord.jpg`);
     }));
+    // test sharpFun if the filename is not in full folder
     it('check creating unlisted image ', () => __awaiter(void 0, void 0, void 0, function* () {
         yield (0, sharpFun_1.default)('example', '600', '300');
         expect((0, checkImageExistence_1.default)(`${imageThumbPath}/resized-600-300-example.jpg`)).toBeFalsy();
     }));
+    // test sharpFun if filename has wrong type
     it('check wrong filename type', () => __awaiter(void 0, void 0, void 0, function* () {
         yield (0, sharpFun_1.default)(43, 432, 432);
         expect((0, checkImageExistence_1.default)(`${imageThumbPath}/resized-432-432-43.jpg`)).toBeFalsy();
