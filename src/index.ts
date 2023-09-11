@@ -1,4 +1,5 @@
 import express from 'express';
+import serverless from 'serverless-http';
 import routes from './routes/index';
 
 const app = express();
@@ -9,8 +10,5 @@ app.get('/', (req: express.Request, res: express.Response): void => {
 
 app.use('/api', routes);
 
-app.listen(3000, () => {
-  console.log('start server on 3000 port');
-});
 
-export default app;
+export const handler = serverless(app);
