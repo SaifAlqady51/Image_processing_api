@@ -1,5 +1,4 @@
 import express from 'express';
-import serverless from 'serverless-http';
 import routes from './routes/index';
 
 const app = express();
@@ -10,5 +9,6 @@ app.get('/', (req: express.Request, res: express.Response): void => {
 
 app.use('/api', routes);
 
-
-export const handler = serverless(app);
+app.listen(3000, () => {
+	console.log('listening to port 3000')
+})
